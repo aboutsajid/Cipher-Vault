@@ -1,0 +1,15 @@
+﻿<Application x:Class="CipherVault.UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CipherVault.UI">
+    <Application.Resources>
+        <ResourceDictionary>
+            <local:BoolToVisibilityConverter x:Key="BoolToVisConverter"/>
+            <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisConverter"/>
+            <local:NullToVisibilityConverter x:Key="NullToVisConverter"/>
+            <local:NotNullToVisibilityConverter x:Key="NotNullToVisConverter"/>
+            <local:StringToVisibilityConverter x:Key="StringToVisConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+

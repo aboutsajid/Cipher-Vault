@@ -1,0 +1,40 @@
+# Build outputs
+**/bin/
+**/obj/
+artifacts/
+installer/Output/
+
+# Test output
+TestResults/
+*.trx
+
+# IDE files
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Local app/vault data
+*.cipherpw
+*.cipherpw-backup
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# Crypto/key material
+*.pfx
+*.snk
+
+# NuGet package outputs
+*.nupkg
+*.snupkg
+# Temporary design scratch files
+tmp_icon_candidates/

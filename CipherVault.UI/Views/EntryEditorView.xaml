@@ -1,0 +1,78 @@
+<Page x:Class="CipherVault.UI.Views.EntryEditorView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource BackgroundBrush}" Title="Edit Entry">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="20,16">
+            <StackPanel>
+                <Button Style="{StaticResource SecondaryButton}" Content="Back" Click="Back_Click"
+                        HorizontalAlignment="Left" Padding="12,6" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Entry Details" Style="{StaticResource Heading}" Margin="0,0,0,24"/>
+
+                <Label Content="Title *"/>
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <Label Content="URL"/>
+                <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <Label Content="Username / Email"/>
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <Label Content="Password"/>
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="PasswordVisible"
+                             Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BoolToVisConverter}}"/>
+                    <PasswordBox Grid.Column="0" x:Name="PasswordHidden"
+                                 Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBoolToVisConverter}}"
+                                 PasswordChanged="PasswordHidden_PasswordChanged"/>
+                    <Button Grid.Column="1" Style="{StaticResource SecondaryButton}"
+                            Content="Show" Padding="10,8" Margin="8,0,0,0"
+                            Command="{Binding TogglePasswordVisibilityCommand}"/>
+                </Grid>
+
+                <TextBlock Text="{Binding GeneratedStrength, StringFormat='Strength: {0}'}"
+                           Foreground="{StaticResource AccentBrush}" FontSize="11" Margin="0,0,0,8"
+                           Visibility="{Binding GeneratedStrength, Converter={StaticResource StringToVisConverter}}"/>
+
+                <Button Style="{StaticResource SecondaryButton}" Content="Generate Password"
+                        Command="{Binding GeneratePasswordCommand}" Margin="0,0,0,16"
+                        HorizontalAlignment="Left"/>
+
+                <Label Content="Password Rotation Reminder"/>
+                <ComboBox ItemsSource="{Binding PasswordReminderOptions}"
+                          DisplayMemberPath="Label"
+                          SelectedValuePath="Days"
+                          SelectedValue="{Binding PasswordReminderDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="0,0,0,16"/>
+
+                <Label Content="Notes"/>
+                <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                         AcceptsReturn="True" Height="80" TextWrapping="Wrap" Margin="0,0,0,16"
+                         VerticalScrollBarVisibility="Auto"/>
+
+                <Label Content="Tags (comma-separated)"/>
+                <TextBox Text="{Binding Tags, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <Label Content="TOTP Secret (optional)"/>
+                <TextBox Text="{Binding TotpSecret, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <CheckBox Content="Mark as Favorite" IsChecked="{Binding Favorite}" Margin="0,0,0,24"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource PrimaryButton}" Content="Save"
+                            Command="{Binding SaveCommand}" Padding="20,10"/>
+                    <Button Style="{StaticResource SecondaryButton}" Content="Cancel" Margin="12,0,0,0"
+                            Command="{Binding CancelCommand}" Padding="20,10"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>
+
+
