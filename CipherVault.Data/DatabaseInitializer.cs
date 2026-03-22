@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 
 namespace CipherVault.Data;
 
@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS app_settings (
     clipboard_clear_seconds INTEGER NOT NULL DEFAULT 25,
     auto_lock_minutes INTEGER NOT NULL DEFAULT 5,
     lock_on_minimize INTEGER NOT NULL DEFAULT 0,
+    start_with_windows INTEGER NOT NULL DEFAULT 1,
     theme TEXT NOT NULL DEFAULT 'System',
     allow_breach_check INTEGER NOT NULL DEFAULT 0,
     last_backup_path TEXT NULL,
@@ -80,6 +81,7 @@ CREATE TABLE IF NOT EXISTS app_settings (
 
         await EnsureColumnAsync(conn, "app_settings", "onboarding_master_password_confirmed", "INTEGER NOT NULL DEFAULT 0");
         await EnsureColumnAsync(conn, "app_settings", "onboarding_backup_confirmed", "INTEGER NOT NULL DEFAULT 0");
+        await EnsureColumnAsync(conn, "app_settings", "start_with_windows", "INTEGER NOT NULL DEFAULT 1");
         await EnsureColumnAsync(conn, "app_settings", "onboarding_transparency_confirmed", "INTEGER NOT NULL DEFAULT 0");
         await EnsureColumnAsync(conn, "app_settings", "browser_capture_silent_mode", "INTEGER NOT NULL DEFAULT 0");
         await EnsureColumnAsync(conn, "app_settings", "browser_capture_auto_save_domains", "TEXT NOT NULL DEFAULT ''");
@@ -102,6 +104,7 @@ INSERT OR IGNORE INTO app_settings (
     clipboard_clear_seconds,
     auto_lock_minutes,
     lock_on_minimize,
+    start_with_windows,
     theme,
     allow_breach_check,
     onboarding_master_password_confirmed,
@@ -118,7 +121,7 @@ INSERT OR IGNORE INTO app_settings (
     last_challenge_completed_utc,
     remediation_dismissed_entry_ids,
     remediation_queue_order_entry_ids)
-VALUES (1, 25, 5, 0, 'System', 0, 0, 0, 0, 0, '', 30, 0, NULL, 0, NULL, 0, NULL, '', '');");
+VALUES (1, 25, 5, 0, 1, 'System', 0, 0, 0, 0, 0, '', 30, 0, NULL, 0, NULL, 0, NULL, '', '');");
     }
 
     private static async Task ExecuteAsync(SqliteConnection conn, string sql)
@@ -143,4 +146,5 @@ VALUES (1, 25, 5, 0, 'System', 0, 0, 0, 0, 0, '', 30, 0, NULL, 0, NULL, 0, NULL,
         await ExecuteAsync(conn, $"ALTER TABLE {tableName} ADD COLUMN {columnName} {columnDefinition};");
     }
 }
+
 

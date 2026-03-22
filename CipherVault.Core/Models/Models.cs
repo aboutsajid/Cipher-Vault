@@ -69,6 +69,7 @@ public class AppSettings
     public int ClipboardClearSeconds { get; set; } = 25;
     public int AutoLockMinutes { get; set; } = 5;
     public bool LockOnMinimize { get; set; } = false;
+    public bool StartWithWindows { get; set; } = true;
     public string Theme { get; set; } = "System";
     public bool AllowBreachCheck { get; set; } = false;
     public string? LastBackupPath { get; set; }
@@ -87,4 +88,3 @@ public class AppSettings
     public string RemediationDismissedEntryIds { get; set; } = string.Empty;
     public string RemediationQueueOrderEntryIds { get; set; } = string.Empty;
 }
-

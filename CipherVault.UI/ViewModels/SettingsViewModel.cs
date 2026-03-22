@@ -1,4 +1,4 @@
-﻿using CipherVault.Core.Interfaces;
+using CipherVault.Core.Interfaces;
 using CipherVault.Core.Models;
 using CipherVault.Core.Services;
 using CipherVault.UI.Services;
@@ -17,6 +17,7 @@ public class SettingsViewModel : ViewModelBase
     private readonly ISettingsRepository _settingsRepo;
     private readonly VaultSessionService _session;
     private readonly WindowsHelloUnlockService _windowsHello;
+    private readonly StartupRegistrationService _startupRegistrationService;
     private AppSettings _settings = new();
     private string _statusMessage = string.Empty;
 
@@ -30,11 +31,13 @@ public class SettingsViewModel : ViewModelBase
     public SettingsViewModel(
         ISettingsRepository settingsRepo,
         VaultSessionService session,
-        WindowsHelloUnlockService windowsHello)
+        WindowsHelloUnlockService windowsHello,
+        StartupRegistrationService startupRegistrationService)
     {
         _settingsRepo = settingsRepo;
         _session = session;
         _windowsHello = windowsHello;
+        _startupRegistrationService = startupRegistrationService;
         SaveCommand = new AsyncRelayCommand(async _ => await SaveAsync());
         _ = LoadAsync();
     }
@@ -54,6 +57,16 @@ public class SettingsViewModel : ViewModelBase
             Settings.RecycleBinRetentionDays = NormalizeRecycleBinRetentionDays(Settings.RecycleBinRetentionDays);
             await _settingsRepo.SaveSettingsAsync(Settings);
             App.ApplyTheme(Settings.Theme);
+
+            string startupStatus = string.Empty;
+            try
+            {
+                _startupRegistrationService.Configure(Settings.StartWithWindows);
+            }
+            catch (Exception startupEx)
+            {
+                startupStatus = $" Startup launch update failed: {startupEx.Message}";
+            }
 
             string helloStatus = string.Empty;
             if (Settings.WindowsHelloEnabled)
@@ -83,7 +96,7 @@ public class SettingsViewModel : ViewModelBase
                 await _windowsHello.DisableAsync();
             }
 
-            StatusMessage = $"Settings saved.{helloStatus}";
+            StatusMessage = $"Settings saved.{helloStatus}{startupStatus}";
             OnSaved?.Invoke();
         }
         catch (Exception ex)

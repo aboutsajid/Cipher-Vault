@@ -1,4 +1,4 @@
-﻿using CipherVault.Core.Interfaces;
+using CipherVault.Core.Interfaces;
 using CipherVault.Core.Models;
 using Microsoft.Data.Sqlite;
 using System.Globalization;
@@ -95,6 +95,7 @@ SELECT
     clipboard_clear_seconds,
     auto_lock_minutes,
     lock_on_minimize,
+    start_with_windows,
     theme,
     allow_breach_check,
     last_backup_path,
@@ -117,7 +118,7 @@ WHERE id=1;";
         using var reader = await cmd.ExecuteReaderAsync();
         if (!await reader.ReadAsync()) return new AppSettings();
 
-        int retentionDays = reader.GetInt32(11);
+        int retentionDays = reader.GetInt32(12);
         retentionDays = Math.Clamp(retentionDays, 1, 3650);
 
         return new AppSettings
@@ -125,23 +126,24 @@ WHERE id=1;";
             ClipboardClearSeconds = reader.GetInt32(0),
             AutoLockMinutes = reader.GetInt32(1),
             LockOnMinimize = reader.GetInt32(2) == 1,
-            Theme = reader.GetString(3),
-            AllowBreachCheck = reader.GetInt32(4) == 1,
-            LastBackupPath = reader.IsDBNull(5) ? null : reader.GetString(5),
-            OnboardingMasterPasswordConfirmed = reader.GetInt32(6) == 1,
-            OnboardingBackupConfirmed = reader.GetInt32(7) == 1,
-            OnboardingTransparencyConfirmed = reader.GetInt32(8) == 1,
-            BrowserCaptureSilentMode = reader.GetInt32(9) == 1,
-            BrowserCaptureAutoSaveDomains = reader.IsDBNull(10) ? string.Empty : reader.GetString(10),
+            StartWithWindows = reader.GetInt32(3) == 1,
+            Theme = reader.GetString(4),
+            AllowBreachCheck = reader.GetInt32(5) == 1,
+            LastBackupPath = reader.IsDBNull(6) ? null : reader.GetString(6),
+            OnboardingMasterPasswordConfirmed = reader.GetInt32(7) == 1,
+            OnboardingBackupConfirmed = reader.GetInt32(8) == 1,
+            OnboardingTransparencyConfirmed = reader.GetInt32(9) == 1,
+            BrowserCaptureSilentMode = reader.GetInt32(10) == 1,
+            BrowserCaptureAutoSaveDomains = reader.IsDBNull(11) ? string.Empty : reader.GetString(11),
             RecycleBinRetentionDays = retentionDays,
-            WindowsHelloEnabled = reader.GetInt32(12) == 1,
-            LastBackupUtc = ParseNullableDate(reader, 13),
-            SecurityStreakDays = reader.GetInt32(14),
-            LastSecurityCheckUtc = ParseNullableDate(reader, 15),
-            CompletedChallengeCount = reader.GetInt32(16),
-            LastChallengeCompletedUtc = ParseNullableDate(reader, 17),
-            RemediationDismissedEntryIds = reader.IsDBNull(18) ? string.Empty : reader.GetString(18),
-            RemediationQueueOrderEntryIds = reader.IsDBNull(19) ? string.Empty : reader.GetString(19)
+            WindowsHelloEnabled = reader.GetInt32(13) == 1,
+            LastBackupUtc = ParseNullableDate(reader, 14),
+            SecurityStreakDays = reader.GetInt32(15),
+            LastSecurityCheckUtc = ParseNullableDate(reader, 16),
+            CompletedChallengeCount = reader.GetInt32(17),
+            LastChallengeCompletedUtc = ParseNullableDate(reader, 18),
+            RemediationDismissedEntryIds = reader.IsDBNull(19) ? string.Empty : reader.GetString(19),
+            RemediationQueueOrderEntryIds = reader.IsDBNull(20) ? string.Empty : reader.GetString(20)
         };
     }
 
@@ -155,6 +157,7 @@ INSERT INTO app_settings (
     clipboard_clear_seconds,
     auto_lock_minutes,
     lock_on_minimize,
+    start_with_windows,
     theme,
     allow_breach_check,
     last_backup_path,
@@ -172,11 +175,12 @@ INSERT INTO app_settings (
     last_challenge_completed_utc,
     remediation_dismissed_entry_ids,
     remediation_queue_order_entry_ids)
-VALUES (1, @cls, @alm, @lom, @theme, @breach, @backup, @masterConfirm, @backupConfirm, @privacyConfirm, @captureSilent, @captureDomains, @recycleRetention, @helloEnabled, @lastBackupUtc, @streakDays, @lastStreakCheckUtc, @challengeCount, @lastChallengeUtc, @remediationDismissed, @remediationOrder)
+VALUES (1, @cls, @alm, @lom, @startWithWindows, @theme, @breach, @backup, @masterConfirm, @backupConfirm, @privacyConfirm, @captureSilent, @captureDomains, @recycleRetention, @helloEnabled, @lastBackupUtc, @streakDays, @lastStreakCheckUtc, @challengeCount, @lastChallengeUtc, @remediationDismissed, @remediationOrder)
 ON CONFLICT(id) DO UPDATE SET
     clipboard_clear_seconds=excluded.clipboard_clear_seconds,
     auto_lock_minutes=excluded.auto_lock_minutes,
     lock_on_minimize=excluded.lock_on_minimize,
+    start_with_windows=excluded.start_with_windows,
     theme=excluded.theme,
     allow_breach_check=excluded.allow_breach_check,
     last_backup_path=excluded.last_backup_path,
@@ -197,6 +201,7 @@ ON CONFLICT(id) DO UPDATE SET
         cmd.Parameters.AddWithValue("@cls", settings.ClipboardClearSeconds);
         cmd.Parameters.AddWithValue("@alm", settings.AutoLockMinutes);
         cmd.Parameters.AddWithValue("@lom", settings.LockOnMinimize ? 1 : 0);
+        cmd.Parameters.AddWithValue("@startWithWindows", settings.StartWithWindows ? 1 : 0);
         cmd.Parameters.AddWithValue("@theme", settings.Theme);
         cmd.Parameters.AddWithValue("@breach", settings.AllowBreachCheck ? 1 : 0);
         cmd.Parameters.AddWithValue("@backup", settings.LastBackupPath ?? (object)DBNull.Value);
@@ -226,3 +231,5 @@ ON CONFLICT(id) DO UPDATE SET
         return null;
     }
 }
+
+

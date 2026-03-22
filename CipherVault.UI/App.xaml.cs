@@ -1,4 +1,4 @@
-﻿using CipherVault.Core.Crypto;
+using CipherVault.Core.Crypto;
 using CipherVault.Core.Interfaces;
 using CipherVault.Core.Services;
 using CipherVault.Data;
@@ -121,6 +121,7 @@ public partial class App : System.Windows.Application
         services.AddSingleton<BackupExportImportService>();
         services.AddSingleton<TotpCodeService>();
         services.AddSingleton<BreachCheckService>(_ => new BreachCheckService(new System.Net.Http.HttpClient()));
+        services.AddSingleton<StartupRegistrationService>();
         services.AddSingleton<BrowserCaptureService>();
         services.AddSingleton<WindowsHelloUnlockService>();
         services.AddSingleton<BrowserDomainService>();
@@ -143,15 +144,28 @@ public partial class App : System.Windows.Application
 
         Services = services.BuildServiceProvider();
 
+        bool startWithWindows = true;
         try
         {
             var settingsRepo = Services.GetRequiredService<ISettingsRepository>();
             var settings = await settingsRepo.GetSettingsAsync();
+            startWithWindows = settings.StartWithWindows;
             ApplyTheme(settings.Theme);
         }
         catch
         {
             ApplyTheme("System");
+        }
+
+        try
+        {
+            Services
+                .GetService<StartupRegistrationService>()?
+                .Configure(startWithWindows);
+        }
+        catch
+        {
+            // Startup registration is best-effort.
         }
 
         // Hook app exit to wipe key
@@ -166,6 +180,8 @@ public partial class App : System.Windows.Application
         win.Show();
     }
 }
+
+
 
 
 

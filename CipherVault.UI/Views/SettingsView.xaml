@@ -1,4 +1,4 @@
-﻿<Page x:Class="CipherVault.UI.Views.SettingsView"
+<Page x:Class="CipherVault.UI.Views.SettingsView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       Background="{DynamicResource BackgroundBrush}" Title="Settings">
@@ -50,6 +50,9 @@
                 <CheckBox Content="Allow breach check (opt-in, requires network)"
                           IsChecked="{Binding AllowBreachCheck}" Margin="0,0,0,24"/>
 
+                <CheckBox Content="Start CipherVault when Windows starts"
+                          IsChecked="{Binding StartWithWindows}" Margin="0,0,0,16"/>
+
                 <CheckBox Content="Enable Windows Hello unlock (fingerprint/face/PIN)"
                           IsChecked="{Binding WindowsHelloEnabled}" Margin="0,0,0,4"/>
                 <TextBlock Text="Use your biometric/PIN to unlock quickly after one password unlock."
@@ -88,5 +91,6 @@
         </Grid>
     </ScrollViewer>
 </Page>
+
 
 

@@ -30,6 +30,7 @@ public class SettingsRepositoryTests : IAsyncLifetime
         AppSettings settings = await _repo.GetSettingsAsync();
 
         Assert.False(settings.BrowserCaptureSilentMode);
+        Assert.True(settings.StartWithWindows);
         Assert.Equal(string.Empty, settings.BrowserCaptureAutoSaveDomains);
         Assert.Null(settings.LastBackupUtc);
         Assert.Equal(0, settings.SecurityStreakDays);
@@ -47,6 +48,7 @@ public class SettingsRepositoryTests : IAsyncLifetime
         settings.BrowserCaptureAutoSaveDomains = "example.com, github.com";
         settings.Theme = "Light";
         settings.AutoLockMinutes = 7;
+        settings.StartWithWindows = false;
         settings.LastBackupUtc = DateTime.UtcNow;
         settings.SecurityStreakDays = 4;
         settings.CompletedChallengeCount = 2;
@@ -63,6 +65,7 @@ public class SettingsRepositoryTests : IAsyncLifetime
         Assert.Equal("example.com, github.com", loaded.BrowserCaptureAutoSaveDomains);
         Assert.Equal("Light", loaded.Theme);
         Assert.Equal(7, loaded.AutoLockMinutes);
+        Assert.False(loaded.StartWithWindows);
         Assert.True(loaded.LastBackupUtc.HasValue);
         Assert.Equal(4, loaded.SecurityStreakDays);
         Assert.Equal(2, loaded.CompletedChallengeCount);
@@ -73,5 +76,3 @@ public class SettingsRepositoryTests : IAsyncLifetime
         Assert.Equal("5,1", loaded.RemediationQueueOrderEntryIds);
     }
 }
-
-
