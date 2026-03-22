@@ -197,7 +197,7 @@
     panel.style.fontFamily = "Rajdhani, Segoe UI, Arial, sans-serif";
 
     const heading = document.createElement("div");
-    heading.textContent = "Cipher™ Autofill";
+    heading.textContent = "Cipherâ„¢ Autofill";
     heading.style.fontSize = "12px";
     heading.style.fontWeight = "600";
     heading.style.color = "#00f5c4";
