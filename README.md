@@ -20,6 +20,7 @@ A production-ready, Windows-only password manager built with .NET 8, WPF (MVVM),
 - **Fix Queue auto-remediation** â€” one-click "Auto Secure" rotation with password history safety
 - **Clipboard auto-clear** (configurable, only clears if still contains app's value)
 - **Auto-lock** after configurable idle timeout
+- **Start with Windows** toggle (Windows Run key, configurable in Settings)
 - **Optional browser capture** (Chrome/Edge load-unpacked extension, localhost only, approval by default with optional silent/domain auto-save)
 - **Dark/Light theme** UI with MVVM architecture
 - **No keylogging** and no hidden data collection
@@ -133,7 +134,7 @@ Vault file extension: `.cipherpw` (SQLite database)
 vault_meta      -- salt, argon params, canary blob
 entries         -- title (plaintext), encrypted_blob (everything else)
 folders         -- folder name and id
-app_settings    -- clipboard clear time, auto-lock, theme, etc.
+app_settings    -- clipboard, auto-lock, startup, theme, browser-capture prefs, etc.
 ```
 
 ---
