@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const INSTALL_FLAG = "__ciphervaultCaptureInstalled";
   if (window[INSTALL_FLAG]) return;
   window[INSTALL_FLAG] = true;
@@ -105,6 +105,9 @@
   setTimeout(maybeAutofillActiveElement, 350);
 
   function captureWithDelay(root, reason) {
+    // Capture immediately before sites mutate or clear form fields,
+    // then retry shortly after for JS-driven submit flows.
+    sendCapture(root, `${reason}:immediate`);
     setTimeout(() => sendCapture(root, reason), 80);
   }
 
@@ -194,7 +197,7 @@
     panel.style.fontFamily = "Rajdhani, Segoe UI, Arial, sans-serif";
 
     const heading = document.createElement("div");
-    heading.textContent = "Cipher™ Autofill";
+    heading.textContent = "Cipher� Autofill";
     heading.style.fontSize = "12px";
     heading.style.fontWeight = "600";
     heading.style.color = "#00f5c4";

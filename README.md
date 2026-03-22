@@ -165,7 +165,7 @@ The default vault is created at:
 ```
 CipherVault.UI/bin/Debug/net8.0-windows/BrowserExtension/chrome
 ```
-4. On login form submit, CipherVault shows a save prompt by default.
+4. On login form submit, CipherVault shows a save prompt by default; choosing Yes saves immediately.
 5. Optional: enable Silent Mode or set auto-save domains in Settings for faster flow.
 
 ---

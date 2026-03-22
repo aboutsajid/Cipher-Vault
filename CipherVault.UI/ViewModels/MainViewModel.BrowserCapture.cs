@@ -1,4 +1,4 @@
-ï»¿using CipherVault.Core.Interfaces;
+using CipherVault.Core.Interfaces;
 using CipherVault.Core.Models;
 using CipherVault.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,12 +82,12 @@ public partial class MainViewModel
         var decision = owner != null
             ? MessageBox.Show(
                 owner,
-                $"Detected login from {captured.SourceBrowser}\nSite: {captured.Title}\nUsername: {(string.IsNullOrWhiteSpace(captured.Username) ? "(empty)" : captured.Username)}\n\nSave this credential to Cipherâ„¢ Vault?",
+                $"Detected login from {captured.SourceBrowser}\nSite: {captured.Title}\nUsername: {(string.IsNullOrWhiteSpace(captured.Username) ? "(empty)" : captured.Username)}\n\nSave this credential to Cipher™ Vault?",
                 "Browser Credential Detected",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question)
             : MessageBox.Show(
-            $"Detected login from {captured.SourceBrowser}\nSite: {captured.Title}\nUsername: {(string.IsNullOrWhiteSpace(captured.Username) ? "(empty)" : captured.Username)}\n\nSave this credential to Cipherâ„¢ Vault?",
+            $"Detected login from {captured.SourceBrowser}\nSite: {captured.Title}\nUsername: {(string.IsNullOrWhiteSpace(captured.Username) ? "(empty)" : captured.Username)}\n\nSave this credential to Cipher™ Vault?",
             "Browser Credential Detected",
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
@@ -117,9 +117,8 @@ public partial class MainViewModel
                 await AddAutoSaveDomainAsync(normalizedHost);
         }
 
-        var entry = BuildCapturedEntry(captured);
-        StatusText = $"Captured credential for {captured.Title}.";
-        RequestOpenEntryEditor?.Invoke(entry);
+        await SaveCapturedEntryDirectAsync(captured);
+        StatusText = $"Captured and saved for {captured.Title}.";
     }
 
     private Window? BringMainWindowToFront()
@@ -291,7 +290,7 @@ public partial class MainViewModel
             });
 
             MessageBox.Show(
-                $"1) Open Chrome/Edge extensions page.\n2) Enable Developer mode.\n3) Load unpacked and select:\n{extensionPath}\n\nCipherâ„¢ endpoint:\n{_browserCapture.Endpoint}",
+                $"1) Open Chrome/Edge extensions page.\n2) Enable Developer mode.\n3) Load unpacked and select:\n{extensionPath}\n\nCipher™ endpoint:\n{_browserCapture.Endpoint}",
                 "Browser Setup",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
