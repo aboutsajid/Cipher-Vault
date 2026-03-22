@@ -1,4 +1,4 @@
-﻿# CipherVault â€” Local-First Encrypted Password Manager
+# CipherVault — Local-First Encrypted Password Manager
 
 A production-ready, Windows-only password manager built with .NET 8, WPF (MVVM), SQLite, Argon2id, and AES-256-GCM.
 
@@ -10,14 +10,14 @@ A production-ready, Windows-only password manager built with .NET 8, WPF (MVVM),
 
 ## Features
 
-- **Local-first vault** â€” all data is encrypted on disk; no cloud sync required
+- **Local-first vault** — all data is encrypted on disk; no cloud sync required
 - **AES-256-GCM** authenticated encryption per entry (tamper-evident)
 - **Argon2id** key derivation (256 MB memory, 3 iterations by default)
 - **Encrypted backup/export** with independent export password
 - **CSV import** from Bitwarden/KeePass with privacy warning
 - **Password generator** (cryptographically secure RNG)
-- **Password audit** â€” weak, missing char classes, reuse detection (in memory only)
-- **Fix Queue auto-remediation** â€” one-click "Auto Secure" rotation with password history safety
+- **Password audit** — weak, missing char classes, reuse detection (in memory only)
+- **Fix Queue auto-remediation** — one-click "Auto Secure" rotation with password history safety
 - **Clipboard auto-clear** (configurable, only clears if still contains app's value)
 - **Auto-lock** after configurable idle timeout
 - **Start with Windows** toggle (Windows Run key, configurable in Settings)
@@ -35,10 +35,10 @@ A production-ready, Windows-only password manager built with .NET 8, WPF (MVVM),
 | Brute-force master password | Argon2id with 256 MB RAM + 3 iterations makes GPU cracking very expensive |
 | Tampered ciphertext | AES-GCM authentication tag verified on every decrypt; throws `AuthenticationTagMismatchException` |
 | Compromised RAM snapshot | Key is zeroed on lock/exit; clipboard is cleared on lock |
-| Weak/reused passwords | Audit service checks in memory only â€” no hash stored on disk |
+| Weak/reused passwords | Audit service checks in memory only — no hash stored on disk |
 | Insecure export | Export uses its own Argon2id + AES-GCM with separate password |
 | CSV import exposes plaintext | User is warned; CSV is immediately encrypted into vault |
-| Password breach | Optional opt-in HIBP k-anonymity check â€” only 5-char SHA-1 prefix sent |
+| Password breach | Optional opt-in HIBP k-anonymity check — only 5-char SHA-1 prefix sent |
 
 ---
 
@@ -47,15 +47,15 @@ A production-ready, Windows-only password manager built with .NET 8, WPF (MVVM),
 ### Key Derivation
 ```
 master_password + random_salt (16 bytes)
-    â†’ Argon2id(memory=256MB, iterations=3, parallelism=min(cores,4))
-    â†’ 32-byte AES key (held in memory only)
+    → Argon2id(memory=256MB, iterations=3, parallelism=min(cores,4))
+    → 32-byte AES key (held in memory only)
 ```
 
 ### Per-Entry Encryption
 ```
 JSON blob { username, password, notes, url, tags, totp_secret }
-    â†’ AES-256-GCM(key, random_nonce_12_bytes)
-    â†’ stored as: [nonce(12)] + [tag(16)] + [ciphertext]
+    → AES-256-GCM(key, random_nonce_12_bytes)
+    → stored as: [nonce(12)] + [tag(16)] + [ciphertext]
 ```
 
 Only the entry **title** is stored in plaintext (for search). An optional "Encrypt titles too" mode exists in VaultMeta.
@@ -81,8 +81,8 @@ A "canary" record `"CIPHERVAULT_CANARY_OK"` is encrypted with the derived key an
 2. App reads `argon_*` parameters and `salt` from `vault_meta`
 3. Argon2id derives a 32-byte key from password + salt
 4. App decrypts `canary_blob` with the derived key
-5. If decryption succeeds and canary value matches â†’ vault is unlocked, key held in memory
-6. If decryption fails â†’ "Incorrect password" is shown; key bytes are zeroed
+5. If decryption succeeds and canary value matches → vault is unlocked, key held in memory
+6. If decryption fails → "Incorrect password" is shown; key bytes are zeroed
 
 ---
 
@@ -93,7 +93,7 @@ When enabled:
 2. The vault's derived key is encrypted with this wrapped key
 3. The wrapped key is protected using Windows Hello (DPAPI/Credential Locker)
 4. On subsequent unlocks, Windows Hello authenticates the user, unwraps the key, and decrypts the vault
-5. Master password is still required after reboot or policy timeout â€” biometrics do NOT replace it
+5. Master password is still required after reboot or policy timeout — biometrics do NOT replace it
 
 ---
 
@@ -101,7 +101,7 @@ When enabled:
 
 ### Importing from Bitwarden / KeePass CSV
 
-âš  **WARNING: CSV files store passwords in PLAINTEXT.**
+⚠ **WARNING: CSV files store passwords in PLAINTEXT.**
 
 1. Export CSV from your old manager
 2. Import into CipherVault (passwords are immediately encrypted)
@@ -197,7 +197,7 @@ CipherVault.UI/bin/Debug/net8.0-windows/BrowserExtension/chrome
 
 ## Security Notes
 
-- The master password is **never stored** anywhere â€” not on disk, not in memory after key derivation
+- The master password is **never stored** anywhere — not on disk, not in memory after key derivation
 - Key material is zeroed using `Array.Clear` on lock/exit
 - Logs contain **no sensitive data** (titles, usernames, passwords are never logged)
 - Clipboard is only cleared if it still contains the app's last copied value (avoids disrupting other work)
@@ -230,4 +230,7 @@ Credit: aboutsajid@gmail.com
 
 
 
+
+
+[![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=aboutsajid.Cipher-Vault)](https://visitor-badge.laobi.icu/badge?page_id=aboutsajid.Cipher-Vault)
 
